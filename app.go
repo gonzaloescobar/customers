@@ -7,9 +7,9 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	. "github.com/gonzaloescobar/customers-restapi/config"
-	. "github.com/gonzaloescobar/customers-restapi/dao"
-	. "github.com/gonzaloescobar/customers-restapi/models"
+	. "github.com/gonzaloescobar/customers/config"
+	. "github.com/gonzaloescobar/customers/dao"
+	. "github.com/gonzaloescobar/customers/models"
 	"github.com/gorilla/mux"
 )
 
