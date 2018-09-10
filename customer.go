@@ -7,7 +7,7 @@ import (
 )
 
 // Defino los tipos de Datos de mi aplicación.
-type Customer struct {
+type Prescription struct {
 	ID       int
 	Apellido string
 	Nombre   string
@@ -19,7 +19,7 @@ type Customer struct {
 
 // Creamos una Instancia con las Características del Cliente.
 func main() {
-	customer := Customer{
+	prescription := Prescription{
 		ID:       1,
 		Apellido: "Escobar",
 		Nombre:   "Gonza",
@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Creamos nuestro JSON a partir de los datos que obtenemos desde la instancia Creada con las Características del Cliente.
-	create_json, _ := json.Marshal(customer)
+	create_json, _ := json.Marshal(prescription)
 
 	// Convertimos los datos(bytes) en una cadena e imprimimos el contenido.
 	convert_to_string := string(create_json)

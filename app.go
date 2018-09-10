@@ -7,76 +7,76 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	. "github.com/gonzaloescobar/customers/config"
-	. "github.com/gonzaloescobar/customers/dao"
-	. "github.com/gonzaloescobar/customers/models"
+	. "github.com/gonzaloescobar/prescriptions/config"
+	. "github.com/gonzaloescobar/prescriptions/dao"
+	. "github.com/gonzaloescobar/prescriptions/models"
 	"github.com/gorilla/mux"
 )
 
 var config = Config{}
-var dao = CustomersDAO{}
+var dao = PrescriptionsDAO{}
 
-// GET list of customers
-func AllCustomersEndPoint(w http.ResponseWriter, r *http.Request) {
-	customers, err := dao.FindAll()
+// GET list of prescriptions
+func AllPrescriptionsEndPoint(w http.ResponseWriter, r *http.Request) {
+	prescriptions, err := dao.FindAll()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusOK, customers)
+	respondWithJson(w, http.StatusOK, prescriptions)
 }
 
-// GET a customer by its ID
-func FindCustomerEndpoint(w http.ResponseWriter, r *http.Request) {
+// GET a prescription by its ID
+func FindPrescriptionEndpoint(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	customer, err := dao.FindById(params["id"])
+	prescription, err := dao.FindById(params["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid Customer ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid Prescription ID")
 		return
 	}
-	respondWithJson(w, http.StatusOK, customer)
+	respondWithJson(w, http.StatusOK, prescription)
 }
 
-// POST a new customer
-func CreateCustomerEndPoint(w http.ResponseWriter, r *http.Request) {
+// POST a new prescription
+func CreatePrescriptionEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var customer Customer
-	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
+	var prescription Prescription
+	if err := json.NewDecoder(r.Body).Decode(&prescription); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	customer.ID = bson.NewObjectId()
-	if err := dao.Insert(customer); err != nil {
+	prescription.ID = bson.NewObjectId()
+	if err := dao.Insert(prescription); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusCreated, customer)
+	respondWithJson(w, http.StatusCreated, prescription)
 }
 
-// PUT update an existing customer
-func UpdateCustomerEndPoint(w http.ResponseWriter, r *http.Request) {
+// PUT update an existing prescription
+func UpdatePrescriptionEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var customer Customer
-	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
+	var prescription Prescription
+	if err := json.NewDecoder(r.Body).Decode(&prescription); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	if err := dao.Update(customer); err != nil {
+	if err := dao.Update(prescription); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	respondWithJson(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
-// DELETE an existing customer
-func DeleteCustomerEndPoint(w http.ResponseWriter, r *http.Request) {
+// DELETE an existing prescription
+func DeletePrescriptionEndPoint(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var customer Customer
-	if err := json.NewDecoder(r.Body).Decode(&customer); err != nil {
+	var prescription Prescription
+	if err := json.NewDecoder(r.Body).Decode(&prescription); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	if err := dao.Delete(customer); err != nil {
+	if err := dao.Delete(prescription); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -106,11 +106,11 @@ func init() {
 // Define HTTP request routes
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/customers", AllCustomersEndPoint).Methods("GET")
-	r.HandleFunc("/customers", CreateCustomerEndPoint).Methods("POST")
-	r.HandleFunc("/customers", UpdateCustomerEndPoint).Methods("PUT")
-	r.HandleFunc("/customers", DeleteCustomerEndPoint).Methods("DELETE")
-	r.HandleFunc("/customers/{id}", FindCustomerEndpoint).Methods("GET")
+	r.HandleFunc("/prescriptions", AllPrescriptionsEndPoint).Methods("GET")
+	r.HandleFunc("/prescriptions", CreatePrescriptionEndPoint).Methods("POST")
+	r.HandleFunc("/prescriptions", UpdatePrescriptionEndPoint).Methods("PUT")
+	r.HandleFunc("/prescriptions", DeletePrescriptionEndPoint).Methods("DELETE")
+	r.HandleFunc("/prescriptions/{id}", FindPrescriptionEndpoint).Methods("GET")
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)
 	}

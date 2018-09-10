@@ -1,2 +1,2 @@
 server="localhost"
-database="customers_db"
+database="prescriptions_db"
