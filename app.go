@@ -16,6 +16,12 @@ import (
 var config = Config{}
 var dao = PrescriptionsDAO{}
 
+	// Suma devuelve el resultado de la adición de dos números
+func Suma(numero1, numero2 int) (resultado int) {
+	resultado = numero1 + numero2
+	return
+}
+
 // GET list of prescriptions
 func AllPrescriptionsEndPoint(w http.ResponseWriter, r *http.Request) {
 	prescriptions, err := dao.FindAll()
@@ -111,7 +117,9 @@ func main() {
 	r.HandleFunc("/prescriptions", UpdatePrescriptionEndPoint).Methods("PUT")
 	r.HandleFunc("/prescriptions", DeletePrescriptionEndPoint).Methods("DELETE")
 	r.HandleFunc("/prescriptions/{id}", FindPrescriptionEndpoint).Methods("GET")
-	if err := http.ListenAndServe(":3000", r); err != nil {
+	if err := http.ListenAndServe(":3001", r); err != nil {
 		log.Fatal(err)
 	}
+
+
 }
